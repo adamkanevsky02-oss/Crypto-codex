@@ -92,6 +92,39 @@ page, Meta ad campaigns, storefront — with **an agent system that turned ad,
 sales and lead data into five-day performance reports behind each scale-or-kill
 call.**
 
+**The numbers (from Adam, 9 Sep 2026):**
+- Peak revenue ~A$200/day; stated ~A$150/day profit
+- Total digital product sales ~A$3,000–4,000
+- Scaled Meta ad spend from A$20/day up to A$100/day
+- Under 50 customers; ran a few months; **currently paused**
+- **Was hacked twice, which killed the traction**
+
+> **ARITHMETIC FLAG — resolve before this goes on a CV.** A$200/day revenue
+> minus A$100/day ad spend leaves A$100/day, not A$150. The A$150 profit figure
+> most likely comes from an earlier point when spend was nearer A$20–50/day.
+> A finance interviewer will do this subtraction in their head immediately, and
+> a number that doesn't reconcile costs more credibility than the number gains.
+> **Confirm with Adam which spend level the A$150 corresponds to before using
+> either figure.**
+
+**Safest framing until confirmed:** lead with the ramp and the sales total,
+which are unambiguous — *"scaled Meta ad spend from A$20 to A$100/day against a
+peak of ~A$200/day revenue, ~A$3.5k in digital product sales."* Avoid stating a
+daily profit figure until the numbers reconcile.
+
+**On the hack:** keep it off the CV — a CV is not the place. But it is a good
+interview answer, and an honest one. Being hacked twice and losing traction is
+a real operating story, and how he responded is more interesting to an employer
+than an uninterrupted success would be. Prepare it as a "what went wrong"
+answer rather than hiding it.
+
+**Scale honesty:** these are modest numbers and should not be inflated. The
+value here is not the revenue — it is that he built the full stack himself
+(landing page, ads, storefront, agent reporting pipeline) and made real
+allocation decisions against real money. Frame it as **a complete system he
+owned end to end**, not as a business success story. Overstating it against a
+fintech operator who runs real budgets would be transparent and damaging.
+
 > **Use this one first with any AI-finance company.** It is literally an agent
 > pipeline converting commercial data into capital-allocation decisions. That is
 > the same shape as the problem most AI-finance firms are solving. It also shows
@@ -131,48 +164,52 @@ That combination is rare and currently in demand.
 
 - **English** — native
 - **Russian** — basic
-- **Mandarin** — none yet. Finishes exams November 2026, starts work August
-  2027, and is spending the ~7 months between them living in mainland China,
-  learning the language and the culture.
+- **Mandarin** — none.
 
-### How to frame this — important
+### The China plan is an ASPIRATION, not a confirmed plan
 
-**Lead with curiosity, not with the gap.** Adam has asked specifically that
-this reads as wanting to explore China and understand it properly — not as
-patching a deficiency or ticking a box for employers.
+**Adam has confirmed this is something he wants to do, not something arranged.**
+He finishes exams November 2026 and would start work August 2027, and he would
+like to use some of that gap living in mainland China.
 
-The difference matters. "I'm learning Mandarin because I know I need it"
-reads as remediation and invites the reader to think about what he lacks.
-"I grew up between Hong Kong and Australia and I want to understand the
-mainland properly" reads as someone building a regional career on purpose.
-Same fact, opposite impression.
+**Never state it as settled.** No "I'm spending seven months in China", no "I
+will be in China from December". Nothing arranged, booked, or committed. If a
+recipient later asks about it and it hasn't happened, an overstated plan becomes
+an awkward correction at exactly the wrong moment.
 
-**Good — interest-led:**
+**Say "hoping to", "want to", "considering".** The interest is real and that is
+what carries the signal — the certainty is not needed to make the point.
 
-> I've grown up between Hong Kong and Australia, and I've always seen the
-> mainland from the outside. I finish exams in November and don't start work
-> until August, so I'm spending those seven months living in China — learning
-> the language properly and getting to know the place first-hand.
+### How to frame it — lead with curiosity
 
-> Before I start work I'm taking seven months to live in mainland China. I want
-> to understand it properly rather than through a Hong Kong lens, and getting to
-> conversational Mandarin is a big part of that.
+Adam has asked that this reads as genuinely wanting to explore China and learn
+the language and culture, not as patching a gap to satisfy employers. That
+framing is also simply more accurate.
+
+**Good — interested and honest about the uncertainty:**
+
+> I've grown up between Hong Kong and Australia and I've only ever seen the
+> mainland from the outside. I finish exams in November and wouldn't start work
+> until August, and something I'd really like to do with that time is live in
+> China for a few months — learn the language properly and get to know the place
+> first-hand.
+
+> One thing I'm hoping to do before I start work is spend time in mainland
+> China. I'd like to understand it properly rather than through a Hong Kong
+> lens, and getting to conversational Mandarin is a big part of that.
 
 **Avoid:**
 
+- Any phrasing that presents it as booked or decided
 - "I know Mandarin is important for this role, so I'm learning it" — remediation
-  framing, draws attention to the gap
-- "I'm passionate about Chinese culture" — hollow, and reads as performance
-- Anything that treats the language as purely instrumental to getting hired
-- Anything implying current ability. He has none yet. Say what he's doing, not
-  what he can do.
+  framing; points straight at the gap
+- "I'm passionate about Chinese culture" — hollow, reads as performance
+- Anything implying current Mandarin ability. He has none.
 
-**Placement in an email:** near the end, as part of who he is and where he's
-going — not in the opening pitch, and never as an excuse. It lands best as a
-closing signal of intent, after the substance about what he's built and done.
+**Placement:** near the end of an email, as a note on where he's heading. Never
+in the opening pitch, never as an excuse, and never as a commitment.
 
-**On the CV:** Adam has decided to leave it off. Keep it to emails and
-interviews.
+**On the CV:** left off entirely, by Adam's decision. Emails and interviews only.
 
 ## Other
 
@@ -230,8 +267,9 @@ Four assets; every email should carry at least two:
 1. **HK citizen** — no sponsorship, grew up there, represented HK at youth level
 2. **Real HK finance experience** — CLSA and Ovata are names that land locally
 3. **Ships AI systems** — multi-agent, in production, with evaluation harnesses
-4. **Genuine regional intent** — seven months living in mainland China before
-   starting, out of real interest in understanding it, not obligation
+4. **Genuine regional intent** — wants to spend time living in mainland China
+   before starting work, out of real interest. State as an aspiration, never
+   as a settled plan.
 
 ## CV fixes worth making
 
