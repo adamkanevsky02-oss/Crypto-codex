@@ -93,29 +93,27 @@ sales and lead data into five-day performance reports behind each scale-or-kill
 call.**
 
 **The numbers (from Adam, 9 Sep 2026):**
-- Peak revenue ~A$200/day; stated ~A$150/day profit
-- Total digital product sales ~A$3,000–4,000
-- Scaled Meta ad spend from A$20/day up to A$100/day
+- Daily revenue ranged **A$194–281** at peak (not a flat A$200)
+- Ad spend ~**A$80/day** at that point, having ramped up from A$20/day
+- **~A$150/day profit**, which reconciles against the revenue range above
+- Total digital product sales ~**A$3,000–4,000**
 - Under 50 customers; ran a few months; **currently paused**
-- **Was hacked twice, which killed the traction**
+- He then raised spend to A$100/day and **was hacked**, which ended the run
 
-**Resolved 9 Sep 2026:** the ~A$150/day profit was reached at roughly A$80/day
-ad spend. He then raised spend to A$100/day and was hacked, which ended the run.
+**Arithmetic checks out.** A$194–281 revenue less ~A$80 ad spend gives roughly
+A$114–201/day, averaging near the stated A$150. Earlier concern resolved — these
+figures can be used.
 
-> **Do not state a daily profit figure.** A$200/day revenue on A$80/day spend
-> leaves ~A$120, not A$150, and these are recollections rather than books. A
-> finance reader does that subtraction instantly and a number that doesn't
-> reconcile costs more than it gains.
->
-> **Use return on ad spend instead** — it's derived from the two figures he's
-> confident about, it's the metric a performance marketer would actually quote,
-> and it's unambiguous: *"peaked at ~A$200/day revenue on ~A$80/day ad spend
-> (~2.5x ROAS) before scaling further."*
+**Use the real range, not a round number.** "A$194–281/day" reads like someone
+who looked at their dashboard; "about A$200/day" reads like a guess. The
+specificity is itself a credibility signal to a finance reader, and it costs
+nothing.
 
-**Safest framing:** *"Built and ran an education venture end to end — landing
-page, Meta ads, storefront — with an agent system turning ad, sales and lead
-data into five-day performance reports behind each scale-or-kill call. Peaked at
-~A$200/day revenue on ~A$80/day ad spend; ~A$3.5k in digital product sales."*
+**Recommended framing:** *"Built and ran an education venture end to end —
+landing page, Meta ads, storefront — with an agent system turning ad, sales and
+lead data into five-day performance reports behind each scale-or-kill call.
+Scaled ad spend from A$20 to A$80/day against A$194–281/day revenue (~A$150/day
+profit); ~A$3.5k in digital product sales."*
 
 **On the hack:** keep it off the CV — a CV is not the place. But it is a good
 interview answer, and an honest one. Being hacked twice and losing traction is
