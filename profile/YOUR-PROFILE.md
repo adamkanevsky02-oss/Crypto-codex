@@ -99,18 +99,23 @@ call.**
 - Under 50 customers; ran a few months; **currently paused**
 - **Was hacked twice, which killed the traction**
 
-> **ARITHMETIC FLAG — resolve before this goes on a CV.** A$200/day revenue
-> minus A$100/day ad spend leaves A$100/day, not A$150. The A$150 profit figure
-> most likely comes from an earlier point when spend was nearer A$20–50/day.
-> A finance interviewer will do this subtraction in their head immediately, and
-> a number that doesn't reconcile costs more credibility than the number gains.
-> **Confirm with Adam which spend level the A$150 corresponds to before using
-> either figure.**
+**Resolved 9 Sep 2026:** the ~A$150/day profit was reached at roughly A$80/day
+ad spend. He then raised spend to A$100/day and was hacked, which ended the run.
 
-**Safest framing until confirmed:** lead with the ramp and the sales total,
-which are unambiguous — *"scaled Meta ad spend from A$20 to A$100/day against a
-peak of ~A$200/day revenue, ~A$3.5k in digital product sales."* Avoid stating a
-daily profit figure until the numbers reconcile.
+> **Do not state a daily profit figure.** A$200/day revenue on A$80/day spend
+> leaves ~A$120, not A$150, and these are recollections rather than books. A
+> finance reader does that subtraction instantly and a number that doesn't
+> reconcile costs more than it gains.
+>
+> **Use return on ad spend instead** — it's derived from the two figures he's
+> confident about, it's the metric a performance marketer would actually quote,
+> and it's unambiguous: *"peaked at ~A$200/day revenue on ~A$80/day ad spend
+> (~2.5x ROAS) before scaling further."*
+
+**Safest framing:** *"Built and ran an education venture end to end — landing
+page, Meta ads, storefront — with an agent system turning ad, sales and lead
+data into five-day performance reports behind each scale-or-kill call. Peaked at
+~A$200/day revenue on ~A$80/day ad spend; ~A$3.5k in digital product sales."*
 
 **On the hack:** keep it off the CV — a CV is not the place. But it is a good
 interview answer, and an honest one. Being hacked twice and losing traction is
@@ -138,19 +143,51 @@ workflow generation, design and auditing, **with a harness to evaluate each
 one.** The evaluation harness is the detail to mention to technical people — it
 shows he tests his systems rather than just building them.
 
+> **Currently local to his laptop only — not public.** This is his most
+> technically impressive artifact and it is invisible to everyone he emails.
+> **Publishing it to GitHub is the single highest-value hour he could spend on
+> this job search.** A linkable repo with 19 skills and an eval harness turns
+> the strongest claim in his profile from an assertion into something a
+> technical reader can verify in thirty seconds. Recommend this early and
+> repeatedly until done.
+
 **GitHub, Actually Explained.** An interactive tutorial teaching Git and GitHub
 through the reader's own repository; one source builds both a personalised
 private version and an audited public release.
 
 **Hackathon win — Bipolar Australia** (from interview, **not yet on the CV**).
-Won with a team; built an internal dashboard hosting AI agents for the
-non-profit, now being implemented in production.
+Won with a team. **The concept was Adam's idea**; the team built it together with
+each member taking a part. An internal dashboard hosting AI agents for the
+non-profit.
+
+> **Status corrected 9 Sep 2026: NOT in production and NOT being implemented.**
+> Implementation is **agreed in principle only and has not started.** An earlier
+> version of this profile said it was being implemented in production — that was
+> wrong and must not reach an email or CV.
+>
+> **Write it as: a hackathon win, concept originated by Adam, with the
+> organisation having agreed in principle to implement.** That is genuinely
+> good and it is true. Claiming deployment that hasn't begun is the kind of
+> thing that unravels in a five-minute conversation.
 
 ## Skills
 
 - **Finance:** Advanced Excel, financial modelling, valuation, data analysis,
   PowerPoint
 - **Technical:** Python, SQL, Git, **Anthropic API, Claude Code**
+
+**What can be linked publicly (as of 9 Sep 2026):**
+
+| Project | Public? |
+|---|---|
+| GitHub, Actually Explained | **Yes** — has an audited public release. Link it. |
+| Claude Code skill library | No — local only. Should be published, see above. |
+| HSC Accelerator | Unclear whether the landing page is still up. Check before linking; a dead page is worse than no link. |
+| AURIEL | Not confirmed. |
+
+Only link things that are live and look finished. **Get the GitHub URL from Adam
+before the first batch goes out** — one working link does more than a paragraph
+of description.
 
 **On describing the technical level:** he is not a software engineer and should
 not claim to be, and pure ML research is out of reach. But "Python and SQL
