@@ -16,6 +16,9 @@ Read these files first — they are the state of the search:
 - `targets/deadlines.md` — application deadline calendar
 - `tracker/outreach.csv` — every contact made, and what happened
 - `templates/email-templates.md` — the email patterns that work
+- `cv/Adam_Kanevsky_CV.pdf` — the current CV. **This is the file to reference or
+  attach in applications.** To change it, edit `cv/cv.html` and `cv/build.js`
+  identically, run `bash cv/build.sh`, and stop if it reports more than one page.
 
 If `profile/YOUR-PROFILE.md` still has placeholder text in it, stop and ask the
 user to fill it in (or offer to interview them and fill it in yourself). Every
