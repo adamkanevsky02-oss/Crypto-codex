@@ -13,7 +13,7 @@ const H2first=t=>{const p=H2(t);return p;};
 const title=t=>P([T(t,{bold:true,size:18})],{spacing:{before:90,after:0}});
 const meta=t=>P([T(t,{italics:true,color:GREY,size:16})],{spacing:{before:10,after:20}});
 const bullet=(runs)=>new Paragraph({numbering:{reference:'bul',level:0},spacing:{before:0,after:10,line:264},children:Array.isArray(runs)?runs:[T(runs)]});
-const proj=(name,desc)=>P([T(name,{bold:true}),T(' — '+desc)],{spacing:{before:0,after:70}});
+const proj=(name,desc)=>P([T(name,{bold:true}),T('. '+desc)],{spacing:{before:0,after:70}});
 
 const left=[
   H2first('Experience'),
@@ -27,12 +27,12 @@ const left=[
   bullet('Research to identify lost assets for businesses and individuals across Australia'),
   title('Trading Desk Intern'), meta('Ovata Capital Management  |  Dec 2024 – Feb 2025'),
   bullet('Researched equities and macro trends to support investment ideas'),
-  bullet('Shadowed portfolio managers; attended the Goldman Sachs APAC Conference'),
+  bullet('Shadowed portfolio managers and attended the Goldman Sachs APAC Conference'),
   title('Business Development Manager'), meta('HK Sports Clinic Academy  |  Dec 2023 – Feb 2025'),
   bullet('Developed marketing and financial plans for expansion'),
   bullet('Led outreach across youth fitness and wellness segments'),
   H2('Education'),
-  title('Bachelor of Economics — Finance & Financial Economics'), meta('University of Sydney  |  2024 – Nov 2026'),
+  title('Bachelor of Economics (Finance & Financial Economics)'), meta('University of Sydney  |  2024 – Nov 2026'),
   title('Australian International School, Hong Kong'), meta('HSC  |  2022 – 2023'),
   bullet('1st in Year 11 Economics  ·  Economics Prize (Year 12)'),
   H2('Extracurricular'),
@@ -46,12 +46,12 @@ const right=[
   bullet('Excel (Advanced), Financial Modelling, Valuation, Data Analysis, PowerPoint'),
   bullet('Python, SQL, Git, Anthropic API, Claude Code'),
   H2('AI Projects'),
-  proj('HSC Accelerator','Education venture run end to end; an agent system turned ad and sales data into five-day scale-or-kill calls. A$194–281/day revenue on A$80/day ad spend.'),
+  proj('HSC Accelerator','Education venture run end to end. An agent system turned ad and sales data into five-day scale-or-kill calls. A$194–281/day revenue on A$80/day ad spend.'),
   proj('Agent content pipeline','Six interlocking Claude Code skills running a full content operation. github.com/adamkanevsky02-oss/agent-content-pipeline'),
   proj('Jarvis','Multi-agent system running a wellness brand: three specialists and a Chief of Staff over a shared vault.'),
   proj('AI Usage Coach','CS50x final project. Python/Flask app parsing Claude Code sessions into weekly summaries via the Anthropic API.'),
   H2('Accolades'),
-  bullet('Hackathon winner — AI agent dashboard for Bipolar Australia'),
+  bullet('Hackathon winner: AI agent dashboard for Bipolar Australia'),
   bullet('1st in Year 11 Economics'),
   bullet('Economics Prize (Year 12)'),
   bullet('Represented Hong Kong at youth level (football)'),

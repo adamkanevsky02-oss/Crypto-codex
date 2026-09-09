@@ -1,115 +1,163 @@
-# Email Templates
+# Email templates: send the work, not the ask
 
-These are **skeletons, not scripts**. The agent rewrites the specifics every
-time. If ten recipients could receive the same email, it's a bad email.
+Every cold email carries something the recipient would have paid for. A one-page
+note on their company, a finding in their filings, a teardown of their signup
+flow, a small tool built for them. The email is the cover note. The CV is
+attached to every one, by Adam's instruction.
 
-## Rules that apply to all of them
+This gets attention because almost nobody does it, and it is professional
+because the artefact has to be right. The agent drafts the artefact; Adam checks
+every number before it goes.
 
-- Under 150 words.
-- Subject line: 3–6 words, lowercase-ish, looks like a human wrote it in a
-  hurry. Not "Application for Data Science Position".
-- Line 1 proves you researched *them this month*.
-- Line 2–3 is one concrete thing you've built or done.
-- Line 4 is one small ask.
-- No CV attached unless asked. Offer it.
-- No "I hope this finds you well". No "I am writing to express my interest".
+Every draft must pass `python3 .claude/skills/humaniser/scripts/check.py` before
+Adam sees it. No exceptions.
 
----
+## Rules for all of them
 
-## Template 1 — Small company, contacting a founder or team lead
+- Under 140 words. The artefact carries the weight, not the email.
+- Subject line is the finding. Not "Graduate application", not "Quick question".
+  Six to ten words, lowercase feel, specific enough that only one company could
+  receive it.
+- Paragraph 1: the finding, and what is attached. Nothing about Adam yet.
+- Paragraph 2: three facts about Adam in plain words. Hong Kong citizen. CLSA
+  and Ovata. Builds the agent systems that made the artefact.
+- Paragraph 3: one small ask. Fifteen minutes, or "who owns this?"
+- Sign off with his first name. "CV attached." as the last line.
+- One admission of uncertainty somewhere. It reads as honest and invites a reply.
+- Never invent a number, a name, a filing, or a quote. Every figure in the
+  artefact is sourced and Adam has checked it by hand.
+- Never say anything about the company that would embarrass the recipient if
+  forwarded to their boss. Findings are framed as opportunities, not failures.
+- For licensed firms, analysis is analysis. Never phrase it as investment advice.
+- No two emails in a batch share an opening sentence.
 
-> **Subject:** question about [specific thing they built]
->
-> Hi [Name],
->
-> I saw [genuinely specific thing — a launch, a funding round, a technical post,
-> a licence they just got]. [One sentence showing you understood it, or a real
-> question about it.]
->
-> I'm [one line: who you are, graduating when]. I built [specific project] —
-> [what it did, with a number if you have one]. It's the closest thing I've done
-> to what your team works on.
->
-> Are you taking on anyone junior in 2027? Happy to send my CV, or just have a
-> 15-minute call if that's easier.
->
-> [Your name]
+## The artefact, by target type
 
-**Why it works:** it reads like one person emailing another, and the ask is
-small enough to say yes to.
+| Target | What to make | Size |
+|---|---|---|
+| Fund, research desk | A note on a name or theme they cover, with a view and a number they may not have seen | 1 page |
+| Fintech, crypto platform | A teardown of one visible thing: signup flow, pricing page, a product decision, with two fixes | 1 page |
+| Bank AI or data team | A brief on one concrete use case in their market, with a rough build plan | 1 page |
+| Startup founder | Something built: a small agent, a dashboard, a script that solves a problem visible from outside | link plus 3 lines |
 
----
-
-## Template 2 — Larger company, contacting a specific team lead
-
-> **Subject:** [team name] — 2027 grad
->
-> Hi [Name],
->
-> I'm applying to [Company]'s graduate programme for 2027 and I'd rather speak
-> to someone on the actual team than just submit into a portal.
->
-> I'm interested in [very specific area — not "AI", but "the fraud detection
-> side" or "your work on X"]. I've done [concrete project or experience],
-> which is why that area specifically.
->
-> Two questions if you have a minute: is [specific thing you want to know], and
-> is there anything you'd want to see in an application to your team?
->
-> [Your name]
-
-**Why it works:** you're asking for advice, not a job. People answer advice
-emails. And it quietly signals you've already applied properly.
+Keep attachments under 1MB total. Plain-text email body. No tracking pixels.
 
 ---
 
-## Template 3 — Warm-ish (alum, mutual connection, met at an event)
+## Template A: the finding (default)
 
-> **Subject:** [shared thing] — quick question
->
-> Hi [Name],
->
-> [How you're connected — same university, met at X, [Mutual] suggested I get
-> in touch.]
->
-> I'm [one line], looking at [specific area] roles in Hong Kong for 2027.
-> [One line on the most relevant thing you've done.]
->
-> Would you have 15 minutes in the next couple of weeks? Mostly want to
-> understand [specific question about their world].
->
-> [Your name]
+*Illustrative numbers below are made up. Never reuse them.*
 
-**Why it works:** the shared connection does the trust work. Highest reply
-rate of the three by a wide margin — always prefer this route when it exists.
-
----
-
-## Follow-up (send once, 7 days later, reply to your own email)
-
-> Hi [Name],
+> **Subject:** a number in your Q2 letter that doesn't match the 2025 deck
 >
-> Bumping this in case it got buried.
+> Hi James,
 >
-> [ONE new thing — something you shipped since, news about them, a relevant
-> thought. Never just "just checking in".]
+> Your Q2 letter puts collections at 94% of forecast. The 2025 investor deck
+> implied 97% at the same point. One page on the gap and what might explain it
+> is attached. I could be wrong about the cause, which is partly why I'm
+> sending it.
 >
-> If it's not the right time or I've got the wrong person, no problem at all —
-> happy to be pointed elsewhere.
+> I'm a Hong Kong citizen finishing an economics degree at Sydney in November.
+> I've done a research summer at CLSA and a trading-desk winter at Ovata. I
+> built the agent pipeline that pulled these filings and drafted the note, then
+> checked every figure by hand.
 >
-> [Your name]
+> Fifteen minutes to argue about it? Or point me at whoever owns that number.
+>
+> Adam
+> CV attached.
 
-Send at most **two** follow-ups, then stop. Chasing harder than that costs you
-more than the reply is worth.
+## Template B: the teardown (fintech, crypto)
 
----
+> **Subject:** where your retail signup loses people
+>
+> Hi Michelle,
+>
+> I went through your retail signup on Sunday and timed each step. Step 3, the
+> address proof, is where I'd expect most people to stop, and the rules don't
+> require it that early. What I found is attached, with two fixes that don't
+> need a policy change.
+>
+> I'm a final-year finance student at Sydney and a Hong Kong citizen, so no
+> visa needed. I spent a summer on CLSA's research desk and a winter on the
+> trading desk at Ovata. I also build agent systems. The one that drafted that
+> page is on my GitHub.
+>
+> If it's useful, I'd take 15 minutes to walk you through it. If I've got the
+> wrong person, who should I send it to?
+>
+> Adam
+> CV attached.
 
-## Things that get you ignored
+## Template C: the build (founders, small teams)
 
-- "I am a highly motivated and passionate individual" — says nothing
-- "Dear Sir/Madam" or "To Whom It May Concern" — you didn't do the research
-- Anything over 200 words
-- Attaching a CV to a first cold email
-- Asking to "pick your brain"
-- Listing every skill you have instead of the one that matters to them
-- The same email sent to 40 companies with the name swapped — people can tell
+> **Subject:** I built the thing from your job post
+>
+> Hi Ravi,
+>
+> Your ops role mentions reconciling exchange fills against the ledger by hand.
+> I built a small agent that does the first pass. Link below, runs on sample
+> data, took me a weekend. It'll be wrong in places you'd spot in a minute.
+>
+> I'm a Hong Kong citizen, finishing economics at Sydney in November, with a
+> summer at CLSA and a winter on a trading desk at Ovata.
+>
+> Want me to point it at your real format? Fifteen minutes and I'd know if
+> it's worth your time.
+>
+> Adam
+> CV attached.
+
+## Template D: warm (CLSA, Ovata, ExodusPoint people)
+
+No stunt. These people know him. Short and direct.
+
+> **Subject:** quick one from the summer
+>
+> Hi Sarah,
+>
+> Hope the desk survived August. I'm finishing in November and I'm after a
+> Hong Kong seat for next year, research or a buy-side desk ideally. If you
+> hear of anything, or know who I should be talking to at ExodusPoint now
+> that the Ovata crew has moved, I'd appreciate a name.
+>
+> CV attached so you don't have to ask.
+>
+> Adam
+
+## Follow-up (once, seven days on, reply in the same thread)
+
+> Hi James,
+>
+> Bumping this once. Since I sent it, your Q3 numbers came out and the gap I
+> flagged shows up there too. Updated note attached, one new page.
+>
+> If it's the wrong time, no problem. Happy to be pointed elsewhere.
+>
+> Adam
+
+Second follow-up only if there is new material. Then stop.
+
+## Variants to test
+
+Tag every send in the tracker with its variant so reply rates can be compared.
+
+| Tag | What changes |
+|---|---|
+| A-finding | Default. Note on their numbers or market |
+| B-teardown | Product or flow teardown with fixes |
+| C-build | A working tool, linked |
+| S-subject-number | Subject line leads with a figure |
+| S-subject-question | Subject line is a question about their business |
+| P-adam-first | Paragraph about Adam moved to the top |
+
+Change one thing per test. Twenty sends per variant before judging it.
+
+## Things that get deleted on sight
+
+- "I hope this finds you well"
+- "I am writing to express my interest"
+- Anything with an em dash
+- A CV attached with no artefact and no finding
+- "Passionate", "leverage", "excited"
+- Praise for the company with no specific behind it

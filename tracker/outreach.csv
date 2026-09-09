@@ -1,1 +1,1 @@
-date_sent,company,person,role_title,email,channel,status,follow_up_due,notes
+date_sent,company,person,role_title,email,channel,variant,subject,artefact,status,reply_type,follow_up_due,notes

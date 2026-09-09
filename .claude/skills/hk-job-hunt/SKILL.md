@@ -24,7 +24,25 @@ If `profile/YOUR-PROFILE.md` still has placeholder text in it, stop and ask the
 user to fill it in (or offer to interview them and fill it in yourself). Every
 other task depends on it.
 
-## The four jobs you do
+## Two rules that apply to everything
+
+1. **Humanise.** Anything written in Adam's voice (emails, follow-ups, replies,
+   artefact prose, cover letters, form answers) goes through
+   `.claude/skills/humaniser/SKILL.md` and must pass
+   `python3 .claude/skills/humaniser/scripts/check.py` before he sees it. He
+   should never have to ask. If it fails, fix it; don't show it.
+2. **Attach the CV.** `cv/Adam_Kanevsky_CV.pdf` goes on every outreach email and
+   every follow-up. This is Adam's instruction and it is not up for debate. Keep
+   total attachments under 1MB.
+
+## Urgency
+
+Adam is in week 6 of his final semester with no plan for after graduation. He
+wants a job, fast. That means: bias toward sending over polishing, warm routes
+before cold ones, and every week's report should say plainly how many real
+conversations are live. HSBC HK closes 31 October 2026 and is rolling.
+
+## The five jobs you do
 
 ### 1. Find targets
 
@@ -45,43 +63,52 @@ vs. cold email).
 something, write `UNVERIFIED` next to it and say so. A made-up contact wastes a
 send and damages the user's credibility.
 
-### 2. Draft outreach
+### 2. Draft outreach: send the work, not the ask
 
-Work in batches of 10–15. For each target:
+Adam's direction: get attention fast, professional but smart. The way to do that
+is to make every cold email carry something the recipient would have paid for.
+`templates/email-templates.md` defines the artefact types, four templates and
+the variants to test. Read it before drafting. For each target:
 
-1. Research the company properly — recent news, funding, product launches,
-   what their engineering or research team is publicly working on.
-2. Identify a specific human: hiring manager, head of the relevant team, or a
-   founder at a small company. A named person beats `careers@` every time.
-3. Find or infer their email. Common patterns are `first.last@`, `first@`,
-   `flast@`. Mark inferred addresses clearly so the user knows the risk.
-4. Write the email using `templates/email-templates.md`.
+1. **Research properly.** Filings, product, pricing, job posts, recent news,
+   public talks. Find one specific thing worth saying that only applies to them.
+2. **Make the artefact.** A one-page note on their numbers or market, a teardown
+   of a visible product flow with two fixes, or a small working build. Draft it
+   with the pipeline, then check every figure against its source. List sources
+   at the bottom. Save it as a PDF (or a link for builds) in `outbox/`.
+3. **Find a named person.** Founder at small firms; head of the relevant desk or
+   team at larger ones. Never `careers@`.
+4. **Find or infer the email.** Mark inferred addresses so Adam sees the risk.
+5. **Write the email** from the matching template. Under 140 words. The subject
+   line is the finding, not the ask.
+6. **Attach** `cv/Adam_Kanevsky_CV.pdf` and the artefact. Under 1MB total.
+7. **Tag the variant** (see templates). Split each batch across at most two
+   variants so results can be compared. Change one thing per test.
+8. **Run the humaniser checker** on the email and the artefact prose. Fix until
+   it prints clean.
 
-Email rules, non-negotiable:
+Hard lines: never invent a fact, number, quote or person. Never frame analysis
+as investment advice to a licensed firm. Never write anything that would
+embarrass the recipient if forwarded to their boss. If there is no real finding
+for a target, skip it and say so; a padded email costs the company for good.
 
-- Under 150 words. Nobody reads more from a stranger.
-- The first line must prove you researched *them specifically*. Not "I admire
-  your work in fintech" — something only true of that company this month.
-- One concrete claim about what the user can do, tied to something real on
-  their CV. No adjectives about being passionate or hardworking.
-- One easy ask: a 15-minute call, or "who should I speak to?" Never attach a
-  CV unsolicited; offer to send it.
-- Sound like a person. No "I hope this email finds you well", no "I am writing
-  to express my interest in", no em-dash-heavy AI cadence.
-- Vary the wording between emails. Ten identical emails is a spam pattern.
+Warm routes first. CLSA analysts from June–July 2026 and the Ovata team now at
+ExodusPoint get Template D, no stunt, before any cold email goes out.
 
-Present the batch to the user as a numbered list they can skim, each with the
-company, the person, the address (flagged if inferred), and the full draft.
-Wait for approval. **Never send anything the user has not seen.**
+Present the batch as a numbered list: company, person, address (flagged if
+inferred), variant, subject, the email, and one line on the artefact with its
+file path. Wait for approval. **Nothing sends without it.**
 
 ### 3. Track everything
 
 After every approved batch, append rows to `tracker/outreach.csv`. Columns:
 
-`date_sent,company,person,role_title,email,channel,status,follow_up_due,notes`
+`date_sent,company,person,role_title,email,channel,variant,subject,artefact,status,reply_type,follow_up_due,notes`
 
 `status` is one of: `drafted`, `sent`, `replied`, `call_booked`, `rejected`,
-`no_response`, `applied`. Set `follow_up_due` to 7 days after send.
+`no_response`, `applied`, `bounced`. `reply_type` is one of: `positive`,
+`referral`, `decline`, `auto_reply`, `bounce`, `other`. Set `follow_up_due` to
+7 days after send.
 
 ### 4. Chase and remind
 
@@ -150,6 +177,25 @@ opt-out instantly.
 - Never send from a domain the user doesn't control.
 - Nothing sends without the user's approval.
 
+### 5. Read replies, measure, and test
+
+This is how the system gets better. It needs Gmail connected to this session.
+
+**When Gmail is available**, at every run:
+
+1. Search the inbox for replies to tracked sends (match sender and subject
+   against the tracker). Classify each `reply_type`, update `status`.
+2. Anything that needs an answer from Adam: draft the reply (humanised) and put
+   it at the top of the report. Replies to real people wait for no one.
+3. Compute, per variant and per target type: sent, replies, positive replies,
+   calls booked, bounces. Show it as a small table.
+4. Judge a variant only after 20 sends. Then keep the winner, retire the loser,
+   and propose the next test: one change, stated in a sentence.
+5. Bounce rate over 5%: stop inferring addresses until it's fixed.
+
+**Until Gmail is connected**, say so in one line of the report, ask Adam to
+paste any replies, and treat pasted replies exactly as above.
+
 ### Health numbers, reported every week
 
 | Metric | Healthy | Act if |
@@ -199,6 +245,13 @@ CLOSING SOON
 
 LAST WEEK
   Sent 51 · 4 replies (7.8%) · 2 calls booked · 1 bounce
+
+TESTS
+  A-finding: 22 sent, 3 replies · B-teardown: 20 sent, 1 reply
+  Next test: subject line leads with the number (S-subject-number)
+
+LIVE CONVERSATIONS
+  3 (HashKey, Micro Connect, one CLSA referral)
 
 NEEDS YOU
   → Review outbox/2026-week-38.md
