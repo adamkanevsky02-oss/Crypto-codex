@@ -131,15 +131,48 @@ That combination is rare and currently in demand.
 
 - **English** — native
 - **Russian** — basic
-- **Mandarin — none yet, but a concrete plan:** finishes exams November 2026,
-  starts work August 2027, and intends to spend the ~7 months between them in
-  mainland China reaching conversational Mandarin.
+- **Mandarin** — none yet. Finishes exams November 2026, starts work August
+  2027, and is spending the ~7 months between them living in mainland China,
+  learning the language and the culture.
 
-State the plan openly and without apology: *"I finish exams in November and
-start in August — I'm spending the seven months between in mainland China
-getting to conversational Mandarin."* It answers the exact reservation a HK
-employer has, and signals a long-term regional commitment. **Never imply current
-ability he doesn't have.**
+### How to frame this — important
+
+**Lead with curiosity, not with the gap.** Adam has asked specifically that
+this reads as wanting to explore China and understand it properly — not as
+patching a deficiency or ticking a box for employers.
+
+The difference matters. "I'm learning Mandarin because I know I need it"
+reads as remediation and invites the reader to think about what he lacks.
+"I grew up between Hong Kong and Australia and I want to understand the
+mainland properly" reads as someone building a regional career on purpose.
+Same fact, opposite impression.
+
+**Good — interest-led:**
+
+> I've grown up between Hong Kong and Australia, and I've always seen the
+> mainland from the outside. I finish exams in November and don't start work
+> until August, so I'm spending those seven months living in China — learning
+> the language properly and getting to know the place first-hand.
+
+> Before I start work I'm taking seven months to live in mainland China. I want
+> to understand it properly rather than through a Hong Kong lens, and getting to
+> conversational Mandarin is a big part of that.
+
+**Avoid:**
+
+- "I know Mandarin is important for this role, so I'm learning it" — remediation
+  framing, draws attention to the gap
+- "I'm passionate about Chinese culture" — hollow, and reads as performance
+- Anything that treats the language as purely instrumental to getting hired
+- Anything implying current ability. He has none yet. Say what he's doing, not
+  what he can do.
+
+**Placement in an email:** near the end, as part of who he is and where he's
+going — not in the opening pitch, and never as an excuse. It lands best as a
+closing signal of intent, after the substance about what he's built and done.
+
+**On the CV:** Adam has decided to leave it off. Keep it to emails and
+interviews.
 
 ## Other
 
@@ -197,7 +230,8 @@ Four assets; every email should carry at least two:
 1. **HK citizen** — no sponsorship, grew up there, represented HK at youth level
 2. **Real HK finance experience** — CLSA and Ovata are names that land locally
 3. **Ships AI systems** — multi-agent, in production, with evaluation harnesses
-4. **Mandarin plan** — deliberate, dated, and answers the obvious objection
+4. **Genuine regional intent** — seven months living in mainland China before
+   starting, out of real interest in understanding it, not obligation
 
 ## CV fixes worth making
 
@@ -209,8 +243,6 @@ Four assets; every email should carry at least two:
   at Ovata Capital."
 - **Quantify HSC Accelerator** if the numbers are respectable — revenue, ad
   spend managed, leads. A number turns it from a project into a business.
-- **Consider adding the Mandarin plan** to the CV summary. It's a differentiator
-  and it pre-empts the question before an interview.
 
 ## Still to get from Adam
 
