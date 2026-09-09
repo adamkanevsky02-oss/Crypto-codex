@@ -136,18 +136,38 @@ fintech operator who runs real budgets would be transparent and damaging.
 **AURIEL.** An interactive website and AI assistant — a multi-agent Claude Code
 system over a shared version-controlled vault, with Slack and voice interfaces.
 
-**Claude Code skill library.** 19 reusable agent skills across research,
-workflow generation, design and auditing, **with a harness to evaluate each
-one.** The evaluation harness is the detail to mention to technical people — it
-shows he tests his systems rather than just building them.
+**Claude Code skill suite — HSC Accelerator (this is the real one).** Six
+interlocking agent skills built for his own venture: `hsc-hook-generator`,
+`ugc-script-writer`, `static-post-generator`, `carousel-generator`,
+`ig-caption-generator`, `avatar-video-generator`. They cross-reference and hand
+off to each other across a full content pipeline, and each encodes the brand's
+personas and content framework. Plus `davo-script-writer` (an AI influencer
+persona) and `json-prompt-generator`. **Eight custom skills in total, all his.**
 
-> **Currently local to his laptop only — not public.** This is his most
-> technically impressive artifact and it is invisible to everyone he emails.
-> **Publishing it to GitHub is the single highest-value hour he could spend on
-> this job search.** A linkable repo with 19 skills and an eval harness turns
-> the strongest claim in his profile from an assertion into something a
-> technical reader can verify in thirty seconds. Recommend this early and
-> repeatedly until done.
+> **CV correction, resolved 9 Sep 2026.** The CV currently claims *"19 reusable
+> agent skills spanning research, workflow generation, design and auditing, with
+> a harness to evaluate each one."* **This is inaccurate and must be changed
+> before the CV goes anywhere.**
+>
+> The 18 skills on his laptop were **installed from third-party public repos** on
+> 4 July 2026 — `github.com/coreyhaines31/marketingskills` (MIT, © Corey Haines)
+> and `github.com/mattpocock/skills` (MIT, © Matt Pocock). The eval harnesses
+> inside them belong to those authors. He curated and uses them; he did not
+> write them.
+>
+> **Never publish those to his GitHub, and never link them as his work.** MIT
+> permits redistribution with attribution, but a CV project entry implies
+> authorship, and the repos are recognisable to exactly the technical audience
+> he is emailing.
+>
+> **Use this instead:** *"Built six interlocking agent skills spanning hook
+> generation, UGC scripts, static ads, carousels, captions and avatar video —
+> each encoding the brand's personas and content framework, with explicit
+> hand-offs so one skill's output feeds the next across a full content
+> pipeline."*
+>
+> This is accurate, verifiable, and stronger than the original claim: it
+> demonstrates system design rather than volume.
 
 **GitHub, Actually Explained.** An interactive tutorial teaching Git and GitHub
 through the reader's own repository; one source builds both a personalised
@@ -179,7 +199,8 @@ non-profit.
 | Project | Public? |
 |---|---|
 | GitHub, Actually Explained | **Yes** — has an audited public release. Link it. |
-| Claude Code skill library | No — local only. Should be published, see above. |
+| Claude Code skill suite (his 8) | Not currently public. Publishable — they are his. |
+| The 18 installed skills | **Do not publish.** Third-party work, see above. |
 | HSC Accelerator | Unclear whether the landing page is still up. Check before linking; a dead page is worse than no link. |
 | AURIEL | Not confirmed. |
 
