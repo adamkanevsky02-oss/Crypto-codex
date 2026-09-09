@@ -54,37 +54,38 @@ Type `/hk-job-hunt` followed by whatever you want:
 | Check progress | `/hk-job-hunt how's it going?` |
 | Deadlines | `/hk-job-hunt what's closing in the next month?` |
 | Someone replied | `/hk-job-hunt HashKey replied, help me answer` |
-| Change the volume | `/hk-job-hunt drop to 50 a week` |
+| Change the volume | `/hk-job-hunt drop to 30 a week` |
 
 ---
 
-## The 100 a week, and what it really means
+## The volume: 50 a week normally, 100 at most
 
-The weekly ceiling is **100 outreach actions**, split by channel:
+A normal week is **about 50 outreach actions**, split by channel:
 
-- **~60–70 formal applications** through job portals and careers pages. These
-  cost you nothing except time, so they scale freely.
-- **~30–40 cold emails** to named people. This is the limited one.
+- **~30–35 formal applications** through job portals and careers pages. These
+  cost you nothing but time, so they scale freely.
+- **~15–20 cold emails** to named people. This is the limited one.
 
-**100 is a ceiling, not a quota.** If only 43 targets in a given week are
-genuinely worth contacting, it sends 43 and tells you why. It won't pad the
-number with companies that don't fit — Hong Kong's AI-finance world is small
-enough that each company is one shot, and there are only a few hundred worth
-approaching in total. Burning them to hit a number costs more than it gains.
+In a genuinely rich week — a wave of new postings, a cluster of deadlines — it
+can go up to **100**. It won't go past that.
 
-Expect it to hit 100 for the first couple of weeks while the list is fresh, then
-settle lower as it works through the good targets and waits for new postings.
-That's the system working correctly, not failing.
+**And it will go below 50 when the week doesn't supply 50.** If only 32 targets
+are worth contacting, it sends 32 and tells you why. It won't pad the number
+with companies that don't fit. Hong Kong's AI-finance world is small enough that
+each company is one shot, and there are only a few hundred worth approaching at
+all — burning them to hit an average costs more than it gains.
 
----
+Roughly: expect ~50 in a typical week, closer to 100 in the first couple while
+the target list is fresh, and honest smaller numbers in quiet weeks.
 
 ## What to expect
 
 - A researched email to a named person: roughly **5–15% reply**
 - A generic email sent to everyone: roughly **0–2%**
 
-At ~35 good cold emails a week you should see **2–5 replies a week**, and a
-meaningful conversation most weeks. That's the number that turns into a job.
+At ~18 good cold emails a week you should see **1–3 replies a week**, and a
+meaningful conversation most weeks. Over a few months that's the volume that
+turns into a job.
 
 The agent tracks bounce rate, reply rate and spam complaints every week. If
 reply rate drops below 2%, it will tell you to improve the emails rather than
@@ -95,8 +96,8 @@ send more of them — more bad emails is never the fix for bad emails.
 ## Limits built in on purpose
 
 - **Nothing sends without your approval.** Ever.
-- **Cold emails spread across the week**, 6–8 a day, never 40 at once. A
-  personal Gmail firing 40 cold emails in an hour looks like a hacked account,
+- **Cold emails spread across the week**, 3–4 a day, never more than 8. A
+  personal Gmail firing 30 cold emails in an hour looks like a hacked account,
   and Google treats it like one.
 - **Bounces are watched closely.** Guessed addresses that bounce are the fastest
   way to wreck your email reputation. Over 5% and it stops guessing.
