@@ -6,7 +6,13 @@ import path from 'node:path';
 import * as research from '../src/trigger/hk-job-hunt/research.js';
 import * as tasks from '../src/trigger/hk-job-hunt/tasks.js';
 const r=research as any;const t=tasks as any;
-const draft={id:'model-id',kind:'cold',company:'Acme',person:'Alex',email:null,variant:'B-teardown',subject:'A check before the next deposit',body:'Hi Alex, I read your guide. I wrote a short note on the payment choice. Adam',holdReasons:['Review required.'],artefact:{title:'Payment choice',sections:[{heading:'Proposal',text:'Show the required evidence beside each route. This is a proposal to test.'}],sources:[{url:'https://example.com/',title:'Guide',checkedAt:'2026-09-11',note:'Check before sending.'}]}};
+const draft={id:'model-id',kind:'cold',approach:'with_sample',company:'Acme',person:'Alex',email:null,variant:'B-teardown',subject:'A check before the next deposit',body:'Hi Alex, I read your guide. I wrote a short note on the payment choice. Adam',holdReasons:['Review required.'],artefact:{title:'Payment choice',sections:[{heading:'Proposal',text:'Show the required evidence beside each route. This is a proposal to test.'}],sources:[{url:'https://example.com/',title:'Guide',checkedAt:'2026-09-11',note:'Check before sending.'}]}};
+test('explicit CV-only cold outreach works, an accidentally missing sample still fails',async()=>{
+ const cvOnly=r.parseColdOutput({...draft,approach:'cv_only',artefact:undefined,body:'Hi Alex, I wrote to ask about a junior role. Adam'},'Acme',[]);
+ assert.equal(cvOnly.artefact,undefined);
+ await r.validateColdDraft(cvOnly,process.cwd(),'2026-09-11',1000);
+ assert.throws(()=>r.parseColdOutput({...draft,artefact:undefined},'Acme',[]));
+});
 test('cold output cannot masquerade as warm or omit its sample',()=>{
  assert.equal(typeof r.parseColdOutput,'function');
  assert.throws(()=>r.parseColdOutput({...draft,kind:'warm',artefact:undefined},'Acme',['https://example.com/']));
@@ -61,7 +67,7 @@ test('confirmed applications block exact roles, one-application employers, and u
  assert.deepEqual(result.applications.map((a:any)=>a.title),['Asset Management']);assert.equal(result.excluded.length,4);
 });
 test('a fully completed weekly manifest still prevents duplicate publication',async()=>{
- const s=await services();s.setPrior({status:'drafts_for_review'});
+ const s=await services();s.setPrior({status:'drafts_for_review',auditVersion:1,createdAt:'2026-09-11T01:00:00Z'});
  const result=await t.runWeeklyCore({date:'2026-09-11'},s.dependencies);
  assert.equal(result.status,'already_prepared');assert.equal(s.publications,0);
 });

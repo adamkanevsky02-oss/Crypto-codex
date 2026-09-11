@@ -4,11 +4,12 @@ import path from 'node:path';
 import {createHash,randomUUID} from 'node:crypto';
 import PDFDocument from 'pdfkit';
 import {canContact,metrics,type Contact} from './policy.js';
+import {assertAudit,type Audit} from './audit.js';
 
 export interface Source {url:string; title:string; checkedAt:string; note:string;}
 export interface Artefact {title:string; sections:{heading:string;text:string}[]; sources:Source[];}
-export interface Email {id:string;kind:'cold'|'warm'|'follow_up'|'reply';company:string;person:string;email:string|null;addressEvidence?:string;variant:string;subject:string;body:string;artefact?:Artefact;holdReasons:string[];}
-export interface Application {id:string;company:string;title:string;url:string;deadline:string|null;start:string;language:string;eligibility:string;points:string[];status:'review'|'held';holdReasons:string[];source:Source;exclusiveGroup?:string;}
+export interface Email {id:string;kind:'cold'|'warm'|'follow_up'|'reply';approach?:'cv_only'|'with_sample';company:string;person:string;email:string|null;addressEvidence?:string;variant:string;subject:string;body:string;artefact?:Artefact;holdReasons:string[];audit?:Audit;}
+export interface Application {id:string;company:string;title:string;url:string;deadline:string|null;start:string;language:string;eligibility:string;points:string[];status:'review'|'held';holdReasons:string[];source:Source;exclusiveGroup?:string;audit?:Audit;}
 export interface Batch {week:string;createdAt:string;emails:Email[];applications:Application[];notes:string[];reserveCount:number;}
 export async function checkCopy(text:string,root:string):Promise<void>{
   if(text.includes(';'))throw new Error('Email/artefact semicolon is not permitted.');
@@ -38,7 +39,8 @@ export function validateBatch(input:unknown):asserts input is Batch{
       if(item.kind==='cold'){
         const key=item.company.trim().toLowerCase();
         if(companies.has(key))throw new Error('Duplicate cold company in batch.'); companies.add(key);
-        if(!item.artefact||item.artefact.sources.length===0)throw new Error('Cold email requires sourced artefact.');
+        if(item.approach==='cv_only'){if(item.artefact)throw new Error('CV-only email must not carry a sample.');}
+        else if(!item.artefact||item.artefact.sources.length===0)throw new Error('Sample approach requires sourced artefact.');
       }
     }
   }
@@ -49,7 +51,7 @@ export async function makePdf(artefact:Artefact):Promise<Buffer>{
     const chunks:Buffer[]=[];doc.on('data',b=>chunks.push(b));doc.on('error',reject);doc.on('end',()=>resolve(Buffer.concat(chunks)));
     doc.font('Helvetica-Bold').fontSize(9).fillColor('#536276').text('ADAM KANEVSKY | RESEARCH SAMPLE');
     doc.moveDown(.8).fontSize(19).fillColor('#172A3A').text(artefact.title);
-    doc.moveDown(.6).font('Helvetica').fontSize(9).fillColor('#586371').text('Draft for review | Public sources only | Please check each stated fact before sending');
+    doc.moveDown(.6).font('Helvetica').fontSize(9).fillColor('#586371').text('Public-source work sample | Hypothetical inputs labelled');
     for(const section of artefact.sections){
       doc.moveDown(.8).font('Helvetica-Bold').fontSize(10).fillColor('#172A3A').text(section.heading);
       doc.moveDown(.25).font('Helvetica').fontSize(10).fillColor('#222222').text(section.text,{lineGap:2});
@@ -86,6 +88,8 @@ async function publishUnlocked(batch:Batch,root:string,rows:Contact[]=[]){
   const folder=path.join(root,'outbox',batch.week);
   const fingerprint=createHash('sha256').update(JSON.stringify(batch)).digest('hex');
   try{const old=JSON.parse(await readFile(path.join(folder,'manifest.json'),'utf8'));if(old.fingerprint===fingerprint){
+    if(old.auditVersion!==1)throw new Error('Legacy pack requires audit before reuse.');
+    for(const item of [...batch.emails,...batch.applications].filter(x=>old.emails.some((e:any)=>e.id===x.id)||old.applicationIds?.includes(x.id)))assertAudit(item);
     try{await readFile(path.join(root,'outbox',batch.week+'.md'));}catch(e:any){if(e.code!=='ENOENT')throw e;const internal=await readFile(path.join(folder,'review.md'),'utf8');await writeFile(path.join(root,'outbox',batch.week+'.md'),internal.replaceAll('](./',`](${batch.week}/`),{flag:'wx'});}
     return old;
   }throw new Error('Week already published with different content; preserve it and review a revision.');}catch(e:any){if(e.code!=='ENOENT')throw e;}
@@ -96,6 +100,7 @@ async function publishUnlocked(batch:Batch,root:string,rows:Contact[]=[]){
   for(const email of batch.emails){
     const policyIssues=canContact(email as Contact,rows,new Date(batch.createdAt));
     if(policyIssues.length){excluded.push({id:email.id,reasons:policyIssues});continue;}
+    try{assertAudit(email);}catch(error){excluded.push({id:email.id,reasons:[String(error)]});continue;}
     await checkCopy(email.subject+'\n'+email.body,root);
     const holds=[...email.holdReasons];
     if(!email.email||!email.addressEvidence)holds.push('UNVERIFIED address. Confirm the recipient before sending.');
@@ -104,24 +109,33 @@ async function publishUnlocked(batch:Batch,root:string,rows:Contact[]=[]){
       await checkCopy([email.artefact.title,...email.artefact.sections.flatMap(x=>[x.heading,x.text]),...email.artefact.sources.map(s=>s.title+' '+s.note)].join('\n'),root);
       for(const s of email.artefact.sources)if(!/^https:\/\//.test(s.url)||!s.checkedAt)throw new Error('Missing source evidence.');
       pdf=await makePdf(email.artefact);
-      holds.push('Adam to check cited facts and approve the research sample.');
+      holds.push('Evidence audit passed. Adam chooses whether to use this research sample.');
     }
     if(cv.length+(pdf?.length||0)>=1000000)throw new Error('Attachments must total under 1MB.');
     ready.push({email,pdf,holds});
   }
-  for(const app of batch.applications)await checkCopy(app.points.join('\n'),root);
+  const applications:Application[]=[];
+  for(const app of batch.applications){
+    try{assertAudit(app);}catch(error){excluded.push({id:app.id,reasons:[String(error)]});continue;}
+    await checkCopy(app.points.join('\n'),root);applications.push(app);
+  }
   const temporary=path.join(root,'tmp',`${batch.week}-${randomUUID()}`);await mkdir(temporary,{recursive:true});
   const report=[`# ${batch.week} | Hong Kong job hunt`,``,`Prepared for review. Nothing sent or submitted.`,...batch.notes.map(x=>`- ${x}`),'',`Reserve targets: ${batch.reserveCount}. ${batch.reserveCount<100?'Below the 100-target aim; replenish only with researched fits.':''}`,'','## Messages'];
-  const manifest:any={week:batch.week,fingerprint,createdAt:batch.createdAt,status:'drafts_for_review',emails:[],excluded,applications:batch.applications.length,metrics:metrics(rows),checks:{humaniser:'clean',attachments:'under 1MB each',artefacts:'one page each'},nothingSent:true};
+  const manifest:any={week:batch.week,fingerprint,createdAt:batch.createdAt,status:excluded.length?'partial':'drafts_for_review',auditVersion:1,emails:[],excluded,applications:applications.length,applicationIds:applications.map(a=>a.id),metrics:metrics(rows),checks:{humaniser:'clean for released copy',audit:'passed for released items only',attachments:'under 1MB each',artefacts:'one page each'},nothingSent:true};
   for(const [index,{email,pdf,holds}] of ready.entries()){
     await writeFile(path.join(temporary,email.id+'.txt'),email.body+'\n');
     await writeFile(path.join(temporary,email.id+'.eml'),makeEml(email,cv,pdf));
+    await writeFile(path.join(temporary,email.id+'-audit.json'),JSON.stringify(email.audit,null,2));
+    await writeFile(path.join(temporary,email.id+'-briefing.md'),email.audit!.briefing+'\n');
     if(pdf)await writeFile(path.join(temporary,email.id+'.pdf'),pdf);
     report.push(`### ${index+1}. ${email.company}: ${email.person}`,`Type: ${email.kind} | Variant: ${email.variant}`,`Address: ${email.email||'UNVERIFIED, not guessed'}`,`Checks: ${holds.join(' ')||'Review and approve before sending.'}`,`Subject: ${email.subject}`,'',email.body,'',`[Email draft with attachments](${batch.week}/${email.id}.eml)${pdf?` | [One-page research sample](${batch.week}/${email.id}.pdf)`:''}`,'');
     manifest.emails.push({id:email.id,kind:email.kind,variant:email.variant,words:email.body.trim().split(/\s+/).length,attachmentBytes:cv.length+(pdf?.length||0),holds});
   }
   report.push('## Formal applications','Compare alternatives within the same programme. Do not submit multiple applications where the employer permits only one.','');
-  for(const app of batch.applications)report.push(`### ${app.company}: ${app.title}`,`[Official application](${app.url})`,`Status: ${app.status}. Deadline: ${app.deadline||'Not published'}. Start: ${app.start}.`,`Language: ${app.language}`,`Eligibility: ${app.eligibility}`,app.exclusiveGroup?`Choose one within: ${app.exclusiveGroup}`:'',...app.holdReasons.map(x=>`- Check: ${x}`),...app.points.map(x=>`- ${x}`),'');
+  for(const app of applications){
+    await writeFile(path.join(temporary,app.id+'-audit.json'),JSON.stringify(app.audit,null,2));
+    report.push(`### ${app.company}: ${app.title}`,`[Official application](${app.url})`,`Status: ${app.status}. Deadline: ${app.deadline||'Not published'}. Start: ${app.start}.`,`Language: ${app.language}`,`Eligibility: ${app.eligibility}`,app.exclusiveGroup?`Choose one within: ${app.exclusiveGroup}`:'',...app.holdReasons.map(x=>`- Check: ${x}`),...app.points.map(x=>`- ${x}`),'');
+  }
   report.push('## TESTS','| Variant | Sent | Human replies | Positive | Calls | Bounces |','|---|---:|---:|---:|---:|---:|',...Array.from(new Set(batch.emails.filter(x=>x.kind==='cold').map(x=>x.variant))).map(v=>{const m=manifest.metrics.variants[v];return `| ${v} | ${m?.sent||0} | ${m?.replies||0} | ${m?.positive||0} | ${m?.calls||0} | ${m?.bounces||0} |`;}),'No variant judgement before 20 confirmed sends per variant. Different target types confound comparisons.','',`Live conversations recorded: ${manifest.metrics.live}. The tracker cannot measure conversations not recorded in it.`);
   await writeFile(path.join(temporary,'manifest.json'),JSON.stringify(manifest,null,2));
   report.push('',...excluded.map(x=>`Excluded ${x.id}: ${x.reasons.join(' ')}`));

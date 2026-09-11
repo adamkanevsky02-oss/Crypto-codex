@@ -5,7 +5,7 @@ import {randomUUID} from 'node:crypto';
 import {parse} from 'csv-parse/sync';
 import type {Contact} from './policy.js';
 
-export const inputFiles=['CLAUDE.md','.claude/skills/hk-job-hunt/SKILL.md','.claude/skills/humaniser/SKILL.md','.claude/skills/humaniser/scripts/check.py','profile/YOUR-PROFILE.md','cv/Adam_Kanevsky_CV.pdf','targets/companies.md','targets/deadlines.md','tracker/outreach.csv','templates/email-templates.md'];
+export const inputFiles=['CLAUDE.md','docs/audit-policy.md','.claude/skills/hk-job-hunt/SKILL.md','.claude/skills/humaniser/SKILL.md','.claude/skills/humaniser/scripts/check.py','profile/YOUR-PROFILE.md','cv/Adam_Kanevsky_CV.pdf','targets/companies.md','targets/deadlines.md','tracker/outreach.csv','templates/email-templates.md'];
 export function parseTracker(csv:string):Contact[]{
   const records=parse(csv,{columns:true,skip_empty_lines:true,bom:true}) as Record<string,string>[];
   return records.map(r=>({...r,company:r.company,email:r.email,follow_up_count:r.follow_up_count&&/^\d+$/.test(r.follow_up_count)?Number(r.follow_up_count):undefined,opt_out:r.opt_out==='true'}));

@@ -6,32 +6,48 @@ import {hkWeek,hkDate,schedule,canContact,companyExcluded,type Contact} from './
 import {publishBatch,checkCopy,validateBatch,type Batch,type Email,type Application} from './package.js';
 import {researchEmail,validateColdDraft,requestResearch,researchContract,applicationSchema,targetSchema,assertGrounded,stableId,type Target} from './research.js';
 import {loadSnapshot,uploadWeek,github,githubConfig} from './repository.js';
+import {reviewItem} from './research.js';
 
 const weeklyQueue=queue({name:'hk-job-hunt-weekly',concurrencyLimit:1});
 const researchQueue=queue({name:'hk-job-hunt-research',concurrencyLimit:2});
 const retry={maxAttempts:3,factor:2,minTimeoutInMs:2000,maxTimeoutInMs:30000};
-export const draftOne=task({id:'hk-job-hunt-draft-one',queue:researchQueue,retry,
+export const draftOne=task({id:'hk-job-hunt-draft-one',queue:researchQueue,retry:{...retry,maxAttempts:1},
   run:async(payload:{company:string;context:string;date:string;cvBytes:number})=>{
-    const email=await researchEmail(payload.company,payload.context,payload.date);
-    await validateColdDraft(email,process.cwd(),payload.date,payload.cvBytes);
-    return email;
+    let feedback='';
+    for(let attempt=0;attempt<3;attempt++){
+      try{
+        const email=await researchEmail(payload.company,payload.context+feedback,payload.date);
+        await validateColdDraft(email,process.cwd(),payload.date,payload.cvBytes);
+        return await reviewItem(email,payload.context);
+      }catch(error){
+        const reason=error instanceof Error?error.message:'Draft audit failed.';
+        if(attempt===2)throw new Error('Held after two repair rounds: '+reason);
+        feedback='\nPrevious attempt failed these checks. Address the actual issue and re-research as needed, without lowering the bar: '+reason;
+      }
+    }
+    throw new Error('Draft review did not complete.');
   }});
 
 export const discoverTargets=task({id:'hk-job-hunt-discover-targets',queue:researchQueue,retry,
   run:async(payload:{context:string;date:string})=>{
-    const r=await requestResearch(`As of ${payload.date}, find up to 100 real Hong Kong finance/AI companies worth researching for an English-speaking economics graduate. Use official directories and company pages. No padding and no pure quant/software engineering. Return JSON array of {company,category,whatTheyDo,fit,size,route,sourceUrl,checkedAt,verification:'verified'|'needs_check'}. A company is verified only if its HK presence and relevant business are supported by the cited source. Role/language hiring eligibility can remain unknown.`,payload.context+'\n'+researchContract);
+    const r=await requestResearch(`As of ${payload.date}, find up to 100 real Hong Kong finance/AI companies worth researching for an English-speaking economics graduate. Use official directories and company pages. Apply the latest sector preferences from the profile as a modest tiebreaker, not a hard filter or quota. Return strongest fits first, keeping other relevant sectors represented. No padding and no pure quant/software engineering. Return JSON array of {company,category,whatTheyDo,fit,size,route,sourceUrl,checkedAt,verification:'verified'|'needs_check'}. A company is verified only if its HK presence and relevant business are supported by the cited source. Role/language hiring eligibility can remain unknown.`,payload.context+'\n'+researchContract);
     const targets=z.array(targetSchema).max(120).parse(r.parsed);assertGrounded(targets.map(t=>({url:t.sourceUrl})),r.evidenceUrls);
     return targets;
   }});
 export const discoverApplications=task({id:'hk-job-hunt-discover-applications',queue:researchQueue,retry,
   run:async(payload:{context:string;date:string})=>{
-    const r=await requestResearch(`As of ${payload.date}, research up to 35 current formal 2027 Hong Kong graduate applications. Prioritise investment services, business analysis, finance and product operations. Avoid engineering and quant. Use the latest confirmed university finish date and availability in the supplied profile. Optional travel before a later-starting job must not become an invented availability restriction. Exclude companies marked excluded in confirmed history. WAM equivalence must be confirmed. One application per HSBC/BNP cycle, verify other firms. Exclude previously applied roles in the supplied confirmed history. Unknown prior programme blocks employer alternatives until reconciled. Return JSON array with keys id,company,title,url,deadline(null if unpublished),start,language,eligibility,points(array of 2 tailored truthful points),status('review'|'held'),holdReasons(array),source({url,title,checkedAt,note}),exclusiveGroup(optional). Unknown language/start/grades means held. Never count generic careers pages as vacancies.`,payload.context+'\n'+researchContract);
+    const r=await requestResearch(`As of ${payload.date}, research up to 35 current formal 2027 Hong Kong graduate applications. Use the latest sector preferences from the profile as a modest tiebreaker among otherwise comparable roles. Strong fit, eligibility and urgent deadlines take precedence. Keep a broad search across investment services, business analysis, finance and product operations. Avoid engineering and quant. Use the latest confirmed university finish date and availability in the supplied profile. Optional travel before a later-starting job must not become an invented availability restriction. Exclude companies marked excluded in confirmed history. WAM equivalence must be confirmed. One application per HSBC/BNP cycle, verify other firms. Exclude previously applied roles in the supplied confirmed history. Unknown prior programme blocks employer alternatives until reconciled. Return JSON array with keys id,company,title,url,deadline(null if unpublished),start,language,eligibility,points(array of 2 tailored truthful points),status('review'|'held'),holdReasons(array),source({url,title,checkedAt,note}),exclusiveGroup(optional). Unknown language/start/grades means held. Never count generic careers pages as vacancies.`,payload.context+'\n'+researchContract);
     const parsed=z.array(applicationSchema).max(35).parse(r.parsed);
     assertGrounded(parsed.flatMap(a=>[{url:a.url},a.source]),r.evidenceUrls);
     const apps=parsed.map(a=>({...a,id:stableId('app',a.url)})).filter((a,i,all)=>all.findIndex(b=>a.id===b.id)===i);
     for(const app of apps)await checkCopy(app.points.join('\n'),process.cwd());
     validateBatch({week:hkWeek(new Date(payload.date+'T00:00:00Z')),emails:[],applications:apps});
-    return apps;
+    const reviewed:Application[]=[];
+    for(const app of apps){
+      try{reviewed.push(await reviewItem(app,payload.context));}
+      catch{reviewed.push({...app,status:'held',holdReasons:[...app.holdReasons,'Separate evidence audit failed. Do not use until re-audited.']});}
+    }
+    return reviewed;
   }});
 
 type Result<T>={ok:true;output:T}|{ok:false};
@@ -74,7 +90,7 @@ export function filterApplicationHistory(applications:Application[],rows:Contact
 export async function runWeeklyCore(payload:Payload,ops:Services=services){
   const now=payload.date?new Date(payload.date):new Date();if(!Number.isFinite(+now))throw new AbortTaskRunError('Invalid run date.');
   const week=hkWeek(now);const date=hkDate(now);const {branch}=ops.config();
-  try{const prior=await ops.prior(week,branch);if(prior.status!=='partial'&&prior.status!=='blocked')return {status:'already_prepared',week,manifest:prior};}catch(e){if(!String(e).includes('404'))throw e;}
+  try{const prior=await ops.prior(week,branch);if(prior.auditVersion===1&&prior.status!=='partial'&&prior.status!=='blocked'&&date===prior.createdAt?.slice(0,10))return {status:'already_prepared',week,manifest:prior};}catch(e){if(!String(e).includes('404'))throw e;}
   const snapshot=await ops.snapshot();
   const cv=await readFile(path.join(snapshot.root,'cv/Adam_Kanevsky_CV.pdf'));
   if(cv.subarray(0,5).toString()!=='%PDF-'||cv.length>=1000000)throw new Error('CV must be a PDF under 1MB.');
@@ -113,11 +129,11 @@ export async function runWeeklyCore(payload:Payload,ops:Services=services){
   await mkdir(path.join(snapshot.root,'private'),{recursive:true});await writeFile(path.join(snapshot.root,'private','research.json'),JSON.stringify({targets,applications},null,2));
   const manifest=await ops.publish(batch,snapshot.root,snapshot.rows);
   manifest.failedItems=failedItems;manifest.failedStages=[];manifest.excludedApplications=history.excluded;
-  if(failedItems.length)manifest.status='partial';
+  if(failedItems.length||manifest.excluded?.length)manifest.status='partial';
   await writeFile(path.join(snapshot.root,'outbox',week,'manifest.json'),JSON.stringify(manifest,null,2));
-  await writeFile(path.join(snapshot.root,'outbox',week,'research.json'),JSON.stringify({targets,applications},null,2));
+  await writeFile(path.join(snapshot.root,'outbox',week,'research.json'),JSON.stringify({targets,applications:applications.filter(a=>manifest.applicationIds?.includes(a.id))},null,2));
   const commit=payload.publish===false?null:await ops.upload(snapshot.root,week,snapshot.head,snapshot.tree);
-  return {week,status:failedItems.length?'partial':commit?'prepared':'validated_unpublished',commit,manifest};
+  return {week,status:manifest.status==='partial'?'partial':commit?'prepared':'validated_unpublished',commit,manifest};
 }
 export const runWeekly=task({id:'hk-job-hunt-run',queue:weeklyQueue,retry,maxDuration:3600,
   run:async(payload:Payload)=>{
