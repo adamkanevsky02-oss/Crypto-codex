@@ -14,7 +14,12 @@ function day(value?:string): number {
   const parsed=new Date(value+'T00:00:00Z');
   return Number.isFinite(+parsed)&&parsed.toISOString().slice(0,10)===value?+parsed:NaN;
 }
+export function companyExcluded(company:string,rows:Contact[]):boolean {
+  const key=normal(company).replace(/[^a-z0-9]+/g,' ').trim();
+  return rows.some(row=>{const excluded=normal(row.company).replace(/[^a-z0-9]+/g,' ').trim();return row.status==='excluded'&&!!excluded&&(key===excluded||key.startsWith(excluded+' '));});
+}
 export function canContact(item: Contact, rows: Contact[], now: Date): string[] {
+  if(companyExcluded(item.company,rows))return ['Company excluded by Adam. Do not prepare outreach.'];
   const same=rows.filter(r=>normal(r.company)===normal(item.company));
   const person=rows.filter(r=>!!item.email&&normal(r.email)===normal(item.email));
   if([...same,...person].some(r=>r.opt_out)) return ['Permanent opt-out: do not contact.'];

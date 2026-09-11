@@ -17,3 +17,9 @@ test('opt-out persists despite later drafted row',()=>assert.match(canContact({k
 test('malformed send date blocks uncertain company history',()=>assert.ok(canContact({kind:'cold',company:'Acme'},[{...sent,date_sent:'yesterday'}],now).length));
 test('zero sends yields no reply rate and zero live conversations',()=>assert.deepEqual(metrics([{...sent,status:'drafted',date_sent:''}]),{sent:0,replies:0,bounces:0,calls:0,live:0,replyRate:null,variants:{}}));
 test('duplicate follow-up rows do not inflate contact or conversation counts',()=>{const result=metrics([{...sent,status:'replied',reply_type:'positive',variant:'A-finding'},{...sent,status:'replied',reply_type:'positive',variant:'A-finding'}]);assert.equal(result.sent,1);assert.equal(result.live,1);});
+test('user company exclusion blocks every outreach kind and company suffix without fabricating a send',()=>{
+  const rows=[{company:'Example Finance',status:'excluded'},{company:'Former Capital',status:'excluded'}];
+  for(const kind of ['cold','warm','follow_up','reply'])for(const company of ['Example Finance','Example Finance Limited','Former Capital Management'])assert.match(canContact({kind,company,email:'example@example.com'},rows,now).join(' '),/excluded/i);
+  assert.equal(canContact({kind:'cold',company:'Other finance firm'},rows,now).length,0);
+  assert.equal(metrics(rows).sent,0);
+});

@@ -2,7 +2,7 @@ import {task,schedules,queue,AbortTaskRunError} from '@trigger.dev/sdk';
 import {z} from 'zod';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import path from 'node:path';
-import {hkWeek,hkDate,schedule,canContact,type Contact} from './policy.js';
+import {hkWeek,hkDate,schedule,canContact,companyExcluded,type Contact} from './policy.js';
 import {publishBatch,checkCopy,validateBatch,type Batch,type Email,type Application} from './package.js';
 import {researchEmail,validateColdDraft,requestResearch,researchContract,applicationSchema,targetSchema,assertGrounded,stableId,type Target} from './research.js';
 import {loadSnapshot,uploadWeek,github,githubConfig} from './repository.js';
@@ -25,7 +25,7 @@ export const discoverTargets=task({id:'hk-job-hunt-discover-targets',queue:resea
   }});
 export const discoverApplications=task({id:'hk-job-hunt-discover-applications',queue:researchQueue,retry,
   run:async(payload:{context:string;date:string})=>{
-    const r=await requestResearch(`As of ${payload.date}, research up to 35 current formal 2027 Hong Kong graduate applications. Prioritise investment services, business analysis, finance and product operations. Avoid engineering and quant. August start currently specified; mark July starts held until confirmed. WAM equivalence must be confirmed. One application per HSBC/BNP cycle, verify other firms. Exclude previously applied roles in the supplied confirmed history. Unknown prior programme blocks employer alternatives until reconciled. Return JSON array with keys id,company,title,url,deadline(null if unpublished),start,language,eligibility,points(array of 2 tailored truthful points),status('review'|'held'),holdReasons(array),source({url,title,checkedAt,note}),exclusiveGroup(optional). Unknown language/start/grades means held. Never count generic careers pages as vacancies.`,payload.context+'\n'+researchContract);
+    const r=await requestResearch(`As of ${payload.date}, research up to 35 current formal 2027 Hong Kong graduate applications. Prioritise investment services, business analysis, finance and product operations. Avoid engineering and quant. Use the latest confirmed university finish date and availability in the supplied profile. Optional travel before a later-starting job must not become an invented availability restriction. Exclude companies marked excluded in confirmed history. WAM equivalence must be confirmed. One application per HSBC/BNP cycle, verify other firms. Exclude previously applied roles in the supplied confirmed history. Unknown prior programme blocks employer alternatives until reconciled. Return JSON array with keys id,company,title,url,deadline(null if unpublished),start,language,eligibility,points(array of 2 tailored truthful points),status('review'|'held'),holdReasons(array),source({url,title,checkedAt,note}),exclusiveGroup(optional). Unknown language/start/grades means held. Never count generic careers pages as vacancies.`,payload.context+'\n'+researchContract);
     const parsed=z.array(applicationSchema).max(35).parse(r.parsed);
     assertGrounded(parsed.flatMap(a=>[{url:a.url},a.source]),r.evidenceUrls);
     const apps=parsed.map(a=>({...a,id:stableId('app',a.url)})).filter((a,i,all)=>all.findIndex(b=>a.id===b.id)===i);
@@ -57,6 +57,7 @@ const normal=(value:string)=>value.trim().toLowerCase().replace(/[^a-z0-9]+/g,' 
 export function filterApplicationHistory(applications:Application[],rows:Contact[]){
   const excluded:{id:string;reason:string}[]=[];
   const remaining=applications.filter(app=>{
+    if(companyExcluded(app.company,rows)){excluded.push({id:app.id,reason:`${app.company}: excluded by Adam.`});return false;}
     const company=normal(app.company);
     const history=rows.filter(row=>row.status==='applied'&&normal(row.company)===company);
     for(const row of history){
@@ -107,7 +108,7 @@ export async function runWeeklyCore(payload:Payload,ops:Services=services){
   for(const row of snapshot.rows){
     if(row.status==='sent'&&row.follow_up_due&&row.follow_up_due<=date)notes.push(`${row.company}: follow-up review needed. ${canContact({...row,kind:'follow_up'},snapshot.rows,now).join(' ')||'Supply the original thread and one new fact before preparing the follow-up.'}`);
   }
-  notes.push('Warm contacts need names and original threads before personalised drafts can be prepared.');
+  notes.push('No internship warm route or reference is authorised. Only prepare warm outreach for a separately confirmed relationship and request.');
   const batch:Batch={week,createdAt:now.toISOString(),emails,applications,notes,reserveCount:targets.filter(t=>t.verification==='verified').length};
   await mkdir(path.join(snapshot.root,'private'),{recursive:true});await writeFile(path.join(snapshot.root,'private','research.json'),JSON.stringify({targets,applications},null,2));
   const manifest=await ops.publish(batch,snapshot.root,snapshot.rows);
