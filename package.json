@@ -1,0 +1,32 @@
+{
+  "name": "hk-job-hunt",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --import tsx --test tests/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "dev": "trigger.dev dev",
+    "deploy": "trigger.dev deploy",
+    "package-batch": "node --import tsx scripts/package-batch.ts"
+  },
+  "dependencies": {
+    "@trigger.dev/sdk": "^4.0.0",
+    "csv-parse": "^7.0.2",
+    "pdfkit": "^0.17.2",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@trigger.dev/build": "^4.0.0",
+    "@types/node": "^22.0.0",
+    "@types/pdfkit": "^0.17.3",
+    "trigger.dev": "^4.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.5.0"
+  },
+  "overrides": {
+    "ws": "^8.21.3",
+    "tar": "^7.5.22",
+    "deepmerge-ts": "^8.0.2"
+  }
+}

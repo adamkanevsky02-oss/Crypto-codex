@@ -1,0 +1,20 @@
+node_modules/
+.env
+.env.*
+!.env.example
+.trigger/
+.cache/
+tmp/
+private/
+*.log
+.DS_Store
+
+# Review packs and confirmed application history stay private.
+outbox/
+
+# Research drafts may contain personal application context.
+research/
+
+# Local implementation state can include personal search context.
+docs/runtime-status.md
+docs/implementation-plan.md

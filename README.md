@@ -1,133 +1,44 @@
-# Hong Kong Job Hunt Agent
+# Hong Kong job hunt
 
-Finds AI + finance companies in Hong Kong, works out who to contact, writes
-personalised emails, submits-ready applications, and tracks everything.
+Prepares researched outreach and formal application options for Adam's 2027 Hong Kong search. Nothing sends or submits. Adam checks the facts, confirms recipients and chooses what to send.
 
-**It runs itself every Monday.** You review a batch and approve. That's your
-only job.
+## Current status
 
-You don't need to write any code to use this.
+The first review batch was prepared locally on 11 September 2026. It includes real PDF attachments and the supplied CV, with the original humaniser checker enforced. Confirmed application history is stored privately and takes precedence over older research lists.
 
----
+Weekly timing is **Monday at 09:07 Hong Kong time**. A timezone-specific Codex schedule has been proposed in the task and requires activation. The cloud runner has not been deployed: a real Trigger.dev project and private storage are still needed. Do not treat a proposed or defined schedule as running. See `docs/runtime-status.md` for the latest verified state.
 
-## How the weekly run works
+## Review workflow
 
-Every **Monday at 9am Hong Kong time**, without you doing anything:
+1. Read the current profile, original job-hunt skill, humaniser, CV, target list and tracker.
+2. Reconcile confirmed applications and replies from private local state. Research current official vacancies and employer application limits.
+3. Prepare short emails and concrete sourced samples. Unknown addresses and eligibility stay held.
+4. Run the original checker on all recipient-facing prose. Package actual CV/sample attachments, then inspect the PDFs.
+5. Present decisions and replies first. Keep sent counts separate from draft counts. Only Adam sends or submits.
 
-1. Searches for new HK AI/finance companies and job postings, adds them to your target list
-2. Checks which application deadlines are closing in the next 30 days
-3. Works out who owes you a reply and drafts the follow-ups
-4. Researches and drafts this week's cold emails
-5. Compiles the formal applications to submit, with tailored points for each
-6. Writes it all into one file in `outbox/` and saves it
-7. Sends you a summary
+Aim for roughly 15 cold emails and 30-35 applications, with a 100-action ceiling. Evidence and employer limits determine the actual count. Company research targets are not live vacancies.
 
-You get a notification. You open the week's file, read down it, change anything
-you don't like, and send the ones you approve.
+## Local verification
 
-**Realistically that's 20–40 minutes on a Monday.** Everything else is done.
+```sh
+npm ci --ignore-scripts
+npm test
+npm run typecheck
+npm run package-batch -- private/batch-2026-week-37.json
+```
 
----
+The last command requires a private batch input prepared through research. It validates original humaniser output, word limits, duplicate IDs, cold samples, one-page PDFs, CV attachment bytes and the attachment size ceiling. It does not research on its own. Repeating the identical batch returns the existing manifest. Different content cannot overwrite a published week.
 
-## Do this first
+## Cloud preparation
 
-**Fill in `profile/YOUR-PROFILE.md`.** Everything depends on it — the agent
-writes every email from it, so thin answers there produce generic emails that
-get ignored.
+The TypeScript Trigger.dev tasks support bounded research calls, retries, per-item checks and an exact Asia/Hong_Kong schedule. Configuration is documented in `.env.example`. Secrets belong in private account settings, never in source control. The worker stays disabled by default. Cloud persistence requires a private repository and does not change the visibility of the original public project.
 
-If you'd rather not write it cold, say `/hk-job-hunt interview me and fill in
-my profile` and it'll ask you questions and write it up itself.
+Before production, configure accounts and spending limits, test one real deployed run, inspect its review pack and verify the next Monday timestamp. Activate only one scheduler. Inbox integration is not implemented in this worker; pasted replies are handled in the Codex task. Warm outreach and follow-ups requiring private thread context remain review decisions in the standalone worker.
 
-Until this is filled in, the Monday runs won't produce anything useful.
+## State and publication
 
----
-
-## Talking to it in between runs
-
-Type `/hk-job-hunt` followed by whatever you want:
-
-| What you want | What to type |
-|---|---|
-| Fill in your profile | `/hk-job-hunt interview me and fill in my profile` |
-| Run this week early | `/hk-job-hunt run this week's batch now` |
-| More companies | `/hk-job-hunt find me 20 more HK AI finance companies` |
-| Check progress | `/hk-job-hunt how's it going?` |
-| Deadlines | `/hk-job-hunt what's closing in the next month?` |
-| Someone replied | `/hk-job-hunt HashKey replied, help me answer` |
-| Change the volume | `/hk-job-hunt drop to 30 a week` |
-
----
-
-## The volume: 50 a week normally, 100 at most
-
-A normal week is **about 50 outreach actions**, split by channel:
-
-- **~30–35 formal applications** through job portals and careers pages. These
-  cost you nothing but time, so they scale freely.
-- **~15–20 cold emails** to named people. This is the limited one.
-
-In a genuinely rich week — a wave of new postings, a cluster of deadlines — it
-can go up to **100**. It won't go past that.
-
-**And it will go below 50 when the week doesn't supply 50.** If only 32 targets
-are worth contacting, it sends 32 and tells you why. It won't pad the number
-with companies that don't fit. Hong Kong's AI-finance world is small enough that
-each company is one shot, and there are only a few hundred worth approaching at
-all — burning them to hit an average costs more than it gains.
-
-Roughly: expect ~50 in a typical week, closer to 100 in the first couple while
-the target list is fresh, and honest smaller numbers in quiet weeks.
-
-## What to expect
-
-- A researched email to a named person: roughly **5–15% reply**
-- A generic email sent to everyone: roughly **0–2%**
-
-At ~18 good cold emails a week you should see **1–3 replies a week**, and a
-meaningful conversation most weeks. Over a few months that's the volume that
-turns into a job.
-
-The agent tracks bounce rate, reply rate and spam complaints every week. If
-reply rate drops below 2%, it will tell you to improve the emails rather than
-send more of them — more bad emails is never the fix for bad emails.
-
----
-
-## Limits built in on purpose
-
-- **Nothing sends without your approval.** Ever.
-- **Cold emails spread across the week**, 3–4 a day, never more than 8. A
-  personal Gmail firing 30 cold emails in an hour looks like a hacked account,
-  and Google treats it like one.
-- **Bounces are watched closely.** Guessed addresses that bounce are the fastest
-  way to wreck your email reputation. Over 5% and it stops guessing.
-- **It won't invent contacts.** Guessed addresses are flagged so you know before sending.
-- **Two follow-ups maximum**, then it marks them closed and moves on.
-- **If someone asks not to be contacted, that's permanent.**
-
----
-
-## What's in here
-
-- **`profile/`** — who you are. Fill this in first.
-- **`outbox/`** — one file per week, everything ready to review.
-- **`targets/companies.md`** — companies to go after.
-- **`targets/deadlines.md`** — deadline calendar. Read this now, things are closing.
-- **`templates/`** — email patterns, and a list of things that get you ignored.
-- **`tracker/outreach.csv`** — everything sent and what happened. Opens in Excel or Sheets.
-
----
-
-## Worth knowing right now
-
-- **HSBC Hong Kong's 2027 graduate programme closes 31 October 2026** and is
-  **rolling** — they fill seats as applications arrive, so applying in September
-  genuinely beats late October.
-- **Quant firms** (Jane Street, Jump, Optiver, IMC, SIG) opened 2027 applications
-  in August. Live now.
-- **US and European bulge-bracket 2027 cycles closed in January 2026.** Those
-  classes were full by May. Don't spend time there.
-
-Which is why cold outreach to startups and mid-size AI-finance firms is your
-main channel, not your backup — they hire when they meet someone good, not on
-a calendar.
+- `tracker/outreach.csv` is the shareable tracker schema. Local confirmed history is in `private/outreach.csv`.
+- Read `private/current-state.md` when it exists. Never assume the public tracker is complete.
+- `research/` contains dated public-source research, not an approved application queue.
+- `outbox/` and `private/` are ignored by source control. Keep CV-bearing drafts and application history private.
+- Do not infer reply rates from draft counts, promise hiring outcomes, or claim an AI writing check verifies facts.

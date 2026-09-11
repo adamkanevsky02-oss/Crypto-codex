@@ -1,0 +1,13 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {checkCopy,validateBatch} from '../src/trigger/hk-job-hunt/package.js';
+const root=process.cwd();
+test('actual supplied checker rejects banned wording',async()=>{await assert.rejects(checkCopy('I am excited to leverage this opportunity.',root),/HUMANISER/);});
+test('actual supplied checker rejects em dash',async()=>{await assert.rejects(checkCopy('This is useful — here is why.',root),/HUMANISER/);});
+test('email semicolons rejected beyond original checker',async()=>{await assert.rejects(checkCopy('I read it; here is my note.',root),/semicolon/);});
+test('natural copy passes',async()=>{await checkCopy("I read your account guide. I've attached a short note on the identity checks.",root);});
+test('never allow 101 actions',()=>assert.throws(()=>validateBatch({emails:Array(101).fill({}),applications:[]}),/100/));
+test('reject path traversal IDs before writing',()=>assert.throws(()=>validateBatch({week:'2026-week-37',emails:[{id:'../../outside',kind:'warm',body:'Hello',subject:'Hi'}],applications:[]}),/id/));
+test('reject three cold variants',()=>assert.throws(()=>validateBatch({week:'2026-week-37',emails:['A-finding','B-teardown','C-build'].map((variant,i)=>({id:'a'+i,kind:'cold',variant,body:'Hello',subject:'Hi'})),applications:[]}),/two/));
+test('reject header injection',()=>assert.throws(()=>validateBatch({week:'2026-week-37',emails:[{id:'warm',kind:'warm',subject:'Hello\r\nBcc: bad@example.com',body:'Hello'}],applications:[]}),/header/));
+test('reject 140 word email',()=>assert.throws(()=>validateBatch({week:'2026-week-37',emails:[{id:'warm',kind:'warm',subject:'Hello',body:Array(140).fill('word').join(' ')}],applications:[]}),/140/));
